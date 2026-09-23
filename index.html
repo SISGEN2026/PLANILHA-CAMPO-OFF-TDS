@@ -9,7 +9,7 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
             background-color: #f1f5f9;
             color: #1e293b;
             display: flex;
@@ -18,7 +18,6 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* Cabecalho */
         header {
             background-color: #064e3b;
             color: #ffffff;
@@ -39,109 +38,34 @@
             gap: 10px;
         }
 
-        .header-title-box {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+        .header-title-box { display: flex; align-items: center; gap: 10px; }
+        .header-icon { background-color: #065f46; padding: 6px 10px; border-radius: 10px; font-size: 18px; }
+        .header-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
 
-        .header-icon {
-            background-color: #065f46;
-            padding: 6px 10px;
-            border-radius: 10px;
-            font-size: 18px;
-        }
-
-        .header-actions {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 8px;
-        }
-
-        /* Botões Globais */
         .btn {
-            border: none;
-            border-radius: 8px;
-            padding: 8px 12px;
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            transition: all 0.2s;
+            border: none; border-radius: 8px; padding: 8px 12px; font-size: 12px; font-weight: 600;
+            cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s;
         }
 
         .btn-exp { background-color: transparent; color: #ecfdf5; border: 1px solid rgba(255,255,255,0.2); }
         .btn-exp.active { background-color: #ffffff; color: #022c22; font-weight: 700; }
         .btn-action { background-color: #047857; color: #ffffff; }
-        .btn-action:active { background-color: #059669; }
         .btn-danger { background-color: #be123c; color: #ffffff; }
-        .btn-danger:active { background-color: #e11d48; }
 
-        /* Layout Principal */
-        main {
-            flex: 1;
-            max-width: 1280px;
-            width: 100%;
-            margin: 0 auto;
-            padding: 12px;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
+        main { flex: 1; max-width: 1280px; width: 100%; margin: 0 auto; padding: 12px; display: flex; flex-direction: column; gap: 16px; }
 
         @media (min-width: 1024px) {
             main { flex-direction: row; }
             aside { width: 320px; flex-shrink: 0; }
         }
 
-        /* Sidebar e Cards */
-        .card {
-            background-color: #ffffff;
-            border-radius: 12px;
-            padding: 12px;
-            border: 1px solid #e2e8f0;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-            margin-bottom: 12px;
-        }
+        .card { background-color: #ffffff; border-radius: 12px; padding: 12px; border: 1px solid #e2e8f0; margin-bottom: 12px; }
+        .card-title { font-size: 11px; font-weight: 700; text-transform: uppercase; color: #334155; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
 
-        .card-title {
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            color: #334155;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
+        .grid-scale { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-bottom: 8px; }
+        .btn-scale { padding: 12px 0; border-radius: 8px; font-weight: 700; font-size: 14px; border: 2px solid transparent; cursor: pointer; text-align: center; }
+        .btn-scale.selected { outline: 3px solid #0f172a; transform: scale(1.05); }
 
-        /* Grade de Botões de Escala (1 a 5) */
-        .grid-scale {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 6px;
-            margin-bottom: 8px;
-        }
-
-        .btn-scale {
-            padding: 12px 0;
-            border-radius: 8px;
-            font-weight: 700;
-            font-size: 14px;
-            border: 2px solid transparent;
-            cursor: pointer;
-            text-align: center;
-        }
-
-        .btn-scale.selected {
-            outline: 3px solid #0f172a;
-            transform: scale(1.05);
-        }
-
-        /* Cores Oficiais Escala VBM */
         .vbm-1 { background-color: #047857 !important; color: #ffffff !important; }
         .vbm-2 { background-color: #d97706 !important; color: #ffffff !important; }
         .vbm-3 { background-color: #c2410c !important; color: #ffffff !important; }
@@ -149,169 +73,31 @@
         .vbm-5 { background-color: #6b21a8 !important; color: #ffffff !important; }
         .vbm-empty { background-color: #fef2f2 !important; color: #991b1b !important; border: 1px solid #f87171 !important; }
 
-        /* Area do Campo / Blocos */
-        .field-area {
-            flex: 1;
-            background-color: #ffffff;
-            border-radius: 12px;
-            padding: 16px;
-            border: 1px solid #e2e8f0;
-            overflow-y: auto;
-        }
+        .field-area { flex: 1; background-color: #ffffff; border-radius: 12px; padding: 16px; border: 1px solid #e2e8f0; overflow-y: auto; }
+        .block-card { background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px; margin-bottom: 16px; }
+        .plots-scroll { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 8px; }
 
-        .block-card {
-            background-color: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 12px;
-            margin-bottom: 16px;
-        }
+        .plot-box { background-color: #ffffff; border: 1px solid #cbd5e1; border-radius: 10px; padding: 8px; width: 130px; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; }
+        .plot-header { width: 100%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+        .plot-badge { background-color: #065f46; color: #ffffff; width: 22px; height: 22px; border-radius: 50%; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
 
-        .plots-scroll {
-            display: flex;
-            gap: 12px;
-            overflow-x: auto;
-            padding-bottom: 8px;
-        }
+        .grid-plot { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; background-color: #f1f5f9; padding: 4px; border-radius: 8px; border: 1px solid #cbd5e1; width: 100%; }
 
-        .plot-box {
-            background-color: #ffffff;
-            border: 1px solid #cbd5e1;
-            border-radius: 10px;
-            padding: 8px;
-            width: 130px;
-            flex-shrink: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+        .cell-plant { height: 38px; border-radius: 4px; font-weight: 700; font-size: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; cursor: pointer; border: 1px solid transparent; }
+        .cell-plant .plant-tag { position: absolute; top: 2px; left: 2px; font-size: 7px; opacity: 0.8; font-weight: 400; }
+        .cell-border { height: 38px; border-radius: 4px; background-color: #e2e8f0; display: flex; align-items: center; justify-content: center; color: #94a3b8; font-size: 10px; }
 
-        .plot-header {
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 6px;
-        }
+        .progress-bar-bg { width: 100%; background-color: #a7f3d0; height: 10px; border-radius: 5px; overflow: hidden; margin-top: 6px; }
+        .progress-bar-fill { background-color: #059669; height: 100%; width: 0%; transition: width 0.3s; }
 
-        .plot-badge {
-            background-color: #065f46;
-            color: #ffffff;
-            width: 22px;
-            height: 22px;
-            border-radius: 50%;
-            font-size: 11px;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+        .modal-overlay { position: fixed; inset: 0; background-color: rgba(15, 23, 42, 0.6); display: flex; align-items: center; justify-content: center; padding: 16px; z-index: 50; }
+        .modal-body { background: #ffffff; border-radius: 12px; max-width: 360px; width: 100%; padding: 20px; }
 
-        /* Grelha 4x6 da Parcela */
-        .grid-plot {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 4px;
-            background-color: #f1f5f9;
-            padding: 4px;
-            border-radius: 8px;
-            border: 1px solid #cbd5e1;
-            width: 100%;
-        }
-
-        .cell-plant {
-            height: 38px;
-            border-radius: 4px;
-            font-weight: 700;
-            font-size: 12px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            cursor: pointer;
-            border: 1px solid transparent;
-        }
-
-        .cell-plant .plant-tag {
-            position: absolute;
-            top: 2px;
-            left: 2px;
-            font-size: 7px;
-            opacity: 0.8;
-            font-weight: 400;
-        }
-
-        .cell-border {
-            height: 38px;
-            border-radius: 4px;
-            background-color: #e2e8f0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #94a3b8;
-            font-size: 10px;
-        }
-
-        /* Barra de Progresso */
-        .progress-bar-bg {
-            width: 100%;
-            background-color: #a7f3d0;
-            height: 10px;
-            border-radius: 5px;
-            overflow: hidden;
-            margin-top: 6px;
-        }
-
-        .progress-bar-fill {
-            background-color: #059669;
-            height: 100%;
-            width: 0%;
-            transition: width 0.3s;
-        }
-
-        /* Modal e Toasts */
-        .modal-overlay {
-            position: fixed;
-            inset: 0;
-            background-color: rgba(15, 23, 42, 0.6);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 16px;
-            z-index: 50;
-        }
-
-        .modal-body {
-            background: #ffffff;
-            border-radius: 12px;
-            max-width: 360px;
-            width: 100%;
-            padding: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-        }
-
-        .toast {
-            position: fixed;
-            bottom: 16px;
-            right: 16px;
-            background-color: #0f172a;
-            color: #ffffff;
-            padding: 12px 18px;
-            border-radius: 10px;
-            font-size: 13px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            transition: all 0.3s;
-            transform: translateY(100px);
-            opacity: 0;
-            z-index: 50;
-        }
-
+        .toast { position: fixed; bottom: 16px; right: 16px; background-color: #0f172a; color: #ffffff; padding: 12px 18px; border-radius: 10px; font-size: 13px; display: flex; align-items: center; gap: 8px; transition: all 0.3s; transform: translateY(100px); opacity: 0; z-index: 50; }
         .toast.show { transform: translateY(0); opacity: 1; }
         .hidden { display: none !important; }
+
+        .no-js-alert { background: #be123c; color: white; padding: 15px; text-align: center; font-weight: bold; }
 
         @media print {
             header, aside, .btn, .modal-overlay, .toast { display: none !important; }
@@ -321,6 +107,12 @@
     </style>
 </head>
 <body>
+
+    <noscript>
+        <div class="no-js-alert">
+            ⚠️ O JavaScript está desativado. Abra este arquivo usando o aplicativo **Chrome** ou **Samsung Internet**, e não pelo visualizador básico de arquivos.
+        </div>
+    </noscript>
 
     <header>
         <div class="header-container">
@@ -346,53 +138,32 @@
     </header>
 
     <main>
-        <!-- Sidebar Controles -->
         <aside>
             <div class="card">
                 <div class="card-title">⭐ Escala VBM (1 a 5)</div>
                 <p style="font-size: 11px; color: #64748b; margin-bottom: 8px;">Selecione a nota e toque na planta útil:</p>
-                
                 <div id="severityButtons" class="grid-scale"></div>
-
                 <button onclick="setSelectedValue('')" class="btn" style="width: 100%; background-color: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; justify-content: center;">
                     🧹 Borracha (Limpar Nota)
                 </button>
             </div>
 
-            <!-- Legenda da Escala -->
             <div class="card">
                 <div class="card-title">📋 Legenda da Escala</div>
                 <div style="display: flex; flex-direction: column; gap: 6px; font-size: 11px;">
-                    <div style="display: flex; align-items: center; gap: 6px;">
-                        <span class="vbm-1" style="width: 18px; height: 18px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: 700;">1</span>
-                        <span>Sem sintomas visíveis</span>
-                    </div>
-                    <div style="display: flex; align-items: center; gap: 6px;">
-                        <span class="vbm-2" style="width: 18px; height: 18px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: 700;">2</span>
-                        <span>Clorose das folhas</span>
-                    </div>
-                    <div style="display: flex; align-items: center; gap: 6px;">
-                        <span class="vbm-3" style="width: 18px; height: 18px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: 700;">3</span>
-                        <span>Necrose das folhas</span>
-                    </div>
-                    <div style="display: flex; align-items: center; gap: 6px;">
-                        <span class="vbm-4" style="width: 18px; height: 18px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: 700;">4</span>
-                        <span>Roseta ou micélios</span>
-                    </div>
-                    <div style="display: flex; align-items: center; gap: 6px;">
-                        <span class="vbm-5" style="width: 18px; height: 18px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: 700;">5</span>
-                        <span>Morte descendente</span>
-                    </div>
+                    <div style="display: flex; align-items: center; gap: 6px;"><span class="vbm-1" style="width: 18px; height: 18px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: 700;">1</span><span>Sem sintomas visíveis</span></div>
+                    <div style="display: flex; align-items: center; gap: 6px;"><span class="vbm-2" style="width: 18px; height: 18px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: 700;">2</span><span>Clorose das folhas</span></div>
+                    <div style="display: flex; align-items: center; gap: 6px;"><span class="vbm-3" style="width: 18px; height: 18px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: 700;">3</span><span>Necrose das folhas</span></div>
+                    <div style="display: flex; align-items: center; gap: 6px;"><span class="vbm-4" style="width: 18px; height: 18px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: 700;">4</span><span>Roseta ou micélios</span></div>
+                    <div style="display: flex; align-items: center; gap: 6px;"><span class="vbm-5" style="width: 18px; height: 18px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: 700;">5</span><span>Morte descendente</span></div>
                 </div>
             </div>
 
-            <!-- Tratamentos -->
             <div class="card">
                 <div class="card-title">📖 Tratamentos</div>
                 <div id="legendContainer" style="display: flex; flex-direction: column; gap: 4px; font-size: 11px;"></div>
             </div>
 
-            <!-- Progresso -->
             <div class="card" style="background-color: #ecfdf5; border-color: #a7f3d0;">
                 <div style="display: flex; justify-content: space-between; font-size: 11px; font-weight: 700; color: #065f46;">
                     <span>Progresso de Avaliação</span>
@@ -404,7 +175,6 @@
             </div>
         </aside>
 
-        <!-- Campo Principal -->
         <section id="captureArea" class="field-area">
             <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; margin-bottom: 12px; border-bottom: 1px solid #e2e8f0;">
                 <div>
@@ -424,7 +194,6 @@
         </section>
     </main>
 
-    <!-- Modal de Confirmação -->
     <div id="customModal" class="modal-overlay hidden">
         <div class="modal-body">
             <h3 id="modalTitle" style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">Confirmação</h3>
@@ -436,7 +205,6 @@
         </div>
     </div>
 
-    <!-- Toast Notification -->
     <div id="toast" class="toast">
         <span id="toastIcon">✅</span>
         <span id="toastMsg">Salvo com sucesso!</span>
@@ -446,12 +214,7 @@
         const experimentsData = {
             sazonal: {
                 title: "AJUSTE SAZONAL TARTARUGALZINHO",
-                treatments: {
-                    1: "Tapioqueira sem irrigação",
-                    2: "Jurará sem irrigação",
-                    3: "Tapioqueira irrigada",
-                    4: "Jurará irrigada"
-                },
+                treatments: { 1: "Tapioqueira sem irrigação", 2: "Jurará sem irrigação", 3: "Tapioqueira irrigada", 4: "Jurará irrigada" },
                 blocks: [
                     { id: 1, name: "BLOCO 1", plots: [1, 2, 4, 3] },
                     { id: 2, name: "BLOCO 2", plots: [2, 1, 3, 4] },
@@ -460,12 +223,7 @@
             },
             poda: {
                 title: "PODA FITOSSANITÁRIA TARTARUGALZINHO",
-                treatments: {
-                    1: "Tapioqueira (sem poda)",
-                    2: "Jurará (sem poda)",
-                    3: "Tapioqueira (com poda)",
-                    4: "Jurará (com poda)"
-                },
+                treatments: { 1: "Tapioqueira (sem poda)", 2: "Jurará (sem poda)", 3: "Tapioqueira (com poda)", 4: "Jurará (com poda)" },
                 blocks: [
                     { id: 2, name: "BLOCO 2", plots: [1, 2, 3, 4] },
                     { id: 1, name: "BLOCO 1", plots: [2, 3, 4, 1] },
@@ -483,10 +241,34 @@
             "3_1": 7, "3_2": 2, "4_1": 8, "4_2": 1
         };
 
-        window.addEventListener('DOMContentLoaded', () => {
+        function safeGetStorage(key) {
+            try {
+                return window.localStorage ? window.localStorage.getItem(key) : null;
+            } catch (e) {
+                return null;
+            }
+        }
+
+        function safeSetStorage(key, value) {
+            try {
+                if (window.localStorage) {
+                    window.localStorage.setItem(key, value);
+                }
+            } catch (e) {
+                console.warn("Armazenamento local bloqueado pelo sistema.");
+            }
+        }
+
+        function init() {
             loadFromLocalStorage();
             renderApp();
-        });
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
 
         function switchExperiment(expKey) {
             currentExperiment = expKey;
@@ -506,11 +288,7 @@
             let html = '';
             for (let i = 1; i <= 5; i++) {
                 const isSelected = selectedValue === String(i) ? 'selected' : '';
-                html += `
-                    <button onclick="setSelectedValue('${i}')" class="btn-scale vbm-${i} ${isSelected}">
-                        ${i}
-                    </button>
-                `;
+                html += `<button onclick="setSelectedValue('${i}')" class="btn-scale vbm-${i} ${isSelected}">${i}</button>`;
             }
             container.innerHTML = html;
         }
@@ -540,9 +318,7 @@
             exp.blocks.forEach(block => {
                 html += `
                     <div class="block-card">
-                        <h3 style="font-size:12px; font-weight:700; color:#064e3b; margin-bottom:8px;">
-                            📦 ${block.name}
-                        </h3>
+                        <h3 style="font-size:12px; font-weight:700; color:#064e3b; margin-bottom:8px;">📦 ${block.name}</h3>
                         <div class="plots-scroll">
                 `;
                 block.plots.forEach(plotNum => {
@@ -576,15 +352,9 @@
                             }
                         }
                     }
-                    html += `
-                            </div>
-                        </div>
-                    `;
+                    html += `</div></div>`;
                 });
-                html += `
-                        </div>
-                    </div>
-                `;
+                html += `</div></div>`;
             });
             container.innerHTML = html;
             updateProgress();
@@ -626,27 +396,25 @@
         }
 
         function autoSaveToLocalStorage() {
-            try {
-                localStorage.setItem('tartarugalzinho_vbm_v10', JSON.stringify(dataStore));
-            } catch (e) { console.error(e); }
+            safeSetStorage('tartarugalzinho_vbm_v11', JSON.stringify(dataStore));
         }
 
         function loadFromLocalStorage() {
-            try {
-                const saved = localStorage.getItem('tartarugalzinho_vbm_v10');
-                if (saved) dataStore = JSON.parse(saved);
-            } catch (e) { console.error(e); }
+            const saved = safeGetStorage('tartarugalzinho_vbm_v11');
+            if (saved) {
+                try { dataStore = JSON.parse(saved); } catch (e) {}
+            }
         }
 
         function saveData() {
             autoSaveToLocalStorage();
-            showToast("Notas salvas no tablet!", "success");
+            showToast("Notas atualizadas!", "success");
         }
 
         function confirmClearData() {
             const modal = document.getElementById('customModal');
             document.getElementById('modalTitle').innerText = "Limpar Avaliações";
-            document.getElementById('modalMessage').innerText = `Deseja realmente limpar as notas de ${experimentsData[currentExperiment].title}?`;
+            document.getElementById('modalMessage').innerText = `Deseja limpar as notas de ${experimentsData[currentExperiment].title}?`;
             
             const confirmBtn = document.getElementById('modalConfirmBtn');
             confirmBtn.onclick = function() {

@@ -4,20 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Planilhas de Campo - Tartarugalzinho</title>
-    
-    <!-- Bibliotecas externas opcionais para exportar PDF/JPEG (Com suporte offline se já em cache) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
-    <!-- ESTILOS CSS PUROS EMBUTIDOS (Garantia 100% Offline para Samsung/Android/iOS) -->
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background-color: #f1f5f9;
             color: #1e293b;
             display: flex;
@@ -55,9 +47,9 @@
 
         .header-icon {
             background-color: #065f46;
-            padding: 8px;
+            padding: 6px 10px;
             border-radius: 10px;
-            color: #6ee7b7;
+            font-size: 18px;
         }
 
         .header-actions {
@@ -71,7 +63,7 @@
         .btn {
             border: none;
             border-radius: 8px;
-            padding: 6px 12px;
+            padding: 8px 12px;
             font-size: 12px;
             font-weight: 600;
             cursor: pointer;
@@ -84,9 +76,9 @@
         .btn-exp { background-color: transparent; color: #ecfdf5; border: 1px solid rgba(255,255,255,0.2); }
         .btn-exp.active { background-color: #ffffff; color: #022c22; font-weight: 700; }
         .btn-action { background-color: #047857; color: #ffffff; }
-        .btn-action:hover { background-color: #059669; }
+        .btn-action:active { background-color: #059669; }
         .btn-danger { background-color: #be123c; color: #ffffff; }
-        .btn-danger:hover { background-color: #e11d48; }
+        .btn-danger:active { background-color: #e11d48; }
 
         /* Layout Principal */
         main {
@@ -102,7 +94,7 @@
 
         @media (min-width: 1024px) {
             main { flex-direction: row; }
-            aside { width: 320px; shrink: 0; }
+            aside { width: 320px; flex-shrink: 0; }
         }
 
         /* Sidebar e Cards */
@@ -135,10 +127,10 @@
         }
 
         .btn-scale {
-            padding: 10px 0;
+            padding: 12px 0;
             border-radius: 8px;
             font-weight: 700;
-            font-size: 13px;
+            font-size: 14px;
             border: 2px solid transparent;
             cursor: pointer;
             text-align: center;
@@ -187,7 +179,7 @@
             border: 1px solid #cbd5e1;
             border-radius: 10px;
             padding: 8px;
-            width: 124px;
+            width: 130px;
             flex-shrink: 0;
             display: flex;
             flex-direction: column;
@@ -205,10 +197,10 @@
         .plot-badge {
             background-color: #065f46;
             color: #ffffff;
-            width: 20px;
-            height: 20px;
+            width: 22px;
+            height: 22px;
             border-radius: 50%;
-            font-size: 10px;
+            font-size: 11px;
             font-weight: 700;
             display: flex;
             align-items: center;
@@ -228,10 +220,10 @@
         }
 
         .cell-plant {
-            height: 36px;
+            height: 38px;
             border-radius: 4px;
             font-weight: 700;
-            font-size: 11px;
+            font-size: 12px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -246,29 +238,29 @@
             top: 2px;
             left: 2px;
             font-size: 7px;
-            opacity: 0.75;
+            opacity: 0.8;
             font-weight: 400;
         }
 
         .cell-border {
-            height: 36px;
+            height: 38px;
             border-radius: 4px;
             background-color: #e2e8f0;
             display: flex;
             align-items: center;
             justify-content: center;
             color: #94a3b8;
-            font-size: 9px;
+            font-size: 10px;
         }
 
         /* Barra de Progresso */
         .progress-bar-bg {
             width: 100%;
             background-color: #a7f3d0;
-            height: 8px;
-            border-radius: 4px;
+            height: 10px;
+            border-radius: 5px;
             overflow: hidden;
-            margin-top: 4px;
+            margin-top: 6px;
         }
 
         .progress-bar-fill {
@@ -282,7 +274,7 @@
         .modal-overlay {
             position: fixed;
             inset: 0;
-            background-color: rgba(15, 23, 42, 0.5);
+            background-color: rgba(15, 23, 42, 0.6);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -296,7 +288,7 @@
             max-width: 360px;
             width: 100%;
             padding: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
         }
 
         .toast {
@@ -305,13 +297,13 @@
             right: 16px;
             background-color: #0f172a;
             color: #ffffff;
-            padding: 10px 16px;
+            padding: 12px 18px;
             border-radius: 10px;
-            font-size: 12px;
+            font-size: 13px;
             display: flex;
             align-items: center;
             gap: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
             transition: all 0.3s;
             transform: translateY(100px);
             opacity: 0;
@@ -320,6 +312,12 @@
 
         .toast.show { transform: translateY(0); opacity: 1; }
         .hidden { display: none !important; }
+
+        @media print {
+            header, aside, .btn, .modal-overlay, .toast { display: none !important; }
+            body, main, .field-area { background: #fff !important; width: 100% !important; padding: 0 !important; margin: 0 !important; }
+            .plots-scroll { flex-wrap: wrap !important; overflow: visible !important; }
+        }
     </style>
 </head>
 <body>
@@ -327,11 +325,9 @@
     <header>
         <div class="header-container">
             <div class="header-title-box">
-                <div class="header-icon">
-                    <i class="fa-solid fa-seedling"></i>
-                </div>
+                <div class="header-icon">🌱</div>
                 <div>
-                    <h1 style="font-size: 14px; font-weight: 700;">Coleta Tartarugalzinho</h1>
+                    <h1 style="font-size: 15px; font-weight: 700;">Coleta Tartarugalzinho</h1>
                     <p style="font-size: 10px; color: #a7f3d0;">Severidade VBM (Campo)</p>
                 </div>
             </div>
@@ -342,10 +338,9 @@
                     <button id="btnExp2" onclick="switchExperiment('poda')" class="btn btn-exp">Poda</button>
                 </div>
 
-                <button onclick="saveData()" class="btn btn-action"><i class="fa-solid fa-floppy-disk"></i> Salvar</button>
-                <button onclick="exportPDF()" class="btn btn-action"><i class="fa-solid fa-file-pdf"></i> PDF</button>
-                <button onclick="exportJPEG()" class="btn btn-action"><i class="fa-solid fa-image"></i> JPEG</button>
-                <button onclick="confirmClearData()" class="btn btn-danger"><i class="fa-solid fa-trash-can"></i></button>
+                <button onclick="saveData()" class="btn btn-action">💾 Salvar</button>
+                <button onclick="exportPDF()" class="btn btn-action">📄 PDF</button>
+                <button onclick="confirmClearData()" class="btn btn-danger">🗑️</button>
             </div>
         </div>
     </header>
@@ -354,44 +349,38 @@
         <!-- Sidebar Controles -->
         <aside>
             <div class="card">
-                <div class="card-title">
-                    <i class="fa-solid fa-star" style="color: #059669;"></i> Escala VBM (1 a 5)
-                </div>
+                <div class="card-title">⭐ Escala VBM (1 a 5)</div>
                 <p style="font-size: 11px; color: #64748b; margin-bottom: 8px;">Selecione a nota e toque na planta útil:</p>
                 
-                <div id="severityButtons" class="grid-scale">
-                    <!-- Gerado via JS -->
-                </div>
+                <div id="severityButtons" class="grid-scale"></div>
 
                 <button onclick="setSelectedValue('')" class="btn" style="width: 100%; background-color: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; justify-content: center;">
-                    <i class="fa-solid fa-eraser"></i> Borracha (Limpar Nota)
+                    🧹 Borracha (Limpar Nota)
                 </button>
             </div>
 
             <!-- Legenda da Escala -->
             <div class="card">
-                <div class="card-title">
-                    <i class="fa-solid fa-clipboard-list" style="color: #059669;"></i> Legenda da Escala
-                </div>
-                <div style="display: flex; flex-direction: column; gap: 4px; font-size: 11px;">
+                <div class="card-title">📋 Legenda da Escala</div>
+                <div style="display: flex; flex-direction: column; gap: 6px; font-size: 11px;">
                     <div style="display: flex; align-items: center; gap: 6px;">
-                        <span class="vbm-1" style="width: 16px; height: 16px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 10px;">1</span>
+                        <span class="vbm-1" style="width: 18px; height: 18px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: 700;">1</span>
                         <span>Sem sintomas visíveis</span>
                     </div>
                     <div style="display: flex; align-items: center; gap: 6px;">
-                        <span class="vbm-2" style="width: 16px; height: 16px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 10px;">2</span>
+                        <span class="vbm-2" style="width: 18px; height: 18px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: 700;">2</span>
                         <span>Clorose das folhas</span>
                     </div>
                     <div style="display: flex; align-items: center; gap: 6px;">
-                        <span class="vbm-3" style="width: 16px; height: 16px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 10px;">3</span>
+                        <span class="vbm-3" style="width: 18px; height: 18px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: 700;">3</span>
                         <span>Necrose das folhas</span>
                     </div>
                     <div style="display: flex; align-items: center; gap: 6px;">
-                        <span class="vbm-4" style="width: 16px; height: 16px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 10px;">4</span>
+                        <span class="vbm-4" style="width: 18px; height: 18px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: 700;">4</span>
                         <span>Roseta ou micélios</span>
                     </div>
                     <div style="display: flex; align-items: center; gap: 6px;">
-                        <span class="vbm-5" style="width: 16px; height: 16px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 10px;">5</span>
+                        <span class="vbm-5" style="width: 18px; height: 18px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: 700;">5</span>
                         <span>Morte descendente</span>
                     </div>
                 </div>
@@ -399,12 +388,8 @@
 
             <!-- Tratamentos -->
             <div class="card">
-                <div class="card-title">
-                    <i class="fa-solid fa-book-open" style="color: #059669;"></i> Tratamentos
-                </div>
-                <div id="legendContainer" style="display: flex; flex-direction: column; gap: 4px; font-size: 11px;">
-                    <!-- Gerado via JS -->
-                </div>
+                <div class="card-title">📖 Tratamentos</div>
+                <div id="legendContainer" style="display: flex; flex-direction: column; gap: 4px; font-size: 11px;"></div>
             </div>
 
             <!-- Progresso -->
@@ -427,15 +412,13 @@
                     <p style="font-size: 11px; color: #64748b;">As 8 plantas úteis centrais são interativas (notas 1 a 5).</p>
                 </div>
                 <div style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 600; color: #475569;">
-                    <i class="fa-solid fa-arrow-right" style="color: #059669;"></i> SENTIDO DAS LEIRAS
+                    ➔ SENTIDO DAS LEIRAS
                 </div>
             </div>
 
-            <div id="blocksContainer">
-                <!-- Gerado via JS -->
-            </div>
+            <div id="blocksContainer"></div>
 
-            <div style="margin-top: 12px; padding-top: 12px; border-top: 2px dashed #cbd5e1; text-align: center; color: #94a3b8; font-weight: 700; font-size: 11px; background: #f8fafc; border-radius: 8px; padding: 8px;">
+            <div style="margin-top: 12px; padding: 8px; border-top: 2px dashed #cbd5e1; text-align: center; color: #94a3b8; font-weight: 700; font-size: 11px; background: #f8fafc; border-radius: 8px;">
                 — — — — RAMAL — — — —
             </div>
         </section>
@@ -455,7 +438,7 @@
 
     <!-- Toast Notification -->
     <div id="toast" class="toast">
-        <i id="toastIcon" class="fa-solid fa-circle-check" style="color: #34d399;"></i>
+        <span id="toastIcon">✅</span>
         <span id="toastMsg">Salvo com sucesso!</span>
     </div>
 
@@ -558,7 +541,7 @@
                 html += `
                     <div class="block-card">
                         <h3 style="font-size:12px; font-weight:700; color:#064e3b; margin-bottom:8px;">
-                            <i class="fa-solid fa-layer-group" style="color:#059669;"></i> ${block.name}
+                            📦 ${block.name}
                         </h3>
                         <div class="plots-scroll">
                 `;
@@ -644,20 +627,20 @@
 
         function autoSaveToLocalStorage() {
             try {
-                localStorage.setItem('tartarugalzinho_vbm_v9', JSON.stringify(dataStore));
+                localStorage.setItem('tartarugalzinho_vbm_v10', JSON.stringify(dataStore));
             } catch (e) { console.error(e); }
         }
 
         function loadFromLocalStorage() {
             try {
-                const saved = localStorage.getItem('tartarugalzinho_vbm_v9');
+                const saved = localStorage.getItem('tartarugalzinho_vbm_v10');
                 if (saved) dataStore = JSON.parse(saved);
             } catch (e) { console.error(e); }
         }
 
         function saveData() {
             autoSaveToLocalStorage();
-            showToast("Notas salvas no dispositivo!", "success");
+            showToast("Notas salvas no tablet!", "success");
         }
 
         function confirmClearData() {
@@ -683,29 +666,13 @@
         function showToast(message, type = 'success') {
             const toast = document.getElementById('toast');
             document.getElementById('toastMsg').innerText = message;
-            document.getElementById('toastIcon').className = type === 'success' ? "fa-solid fa-circle-check" : "fa-solid fa-triangle-exclamation";
+            document.getElementById('toastIcon').innerText = type === 'success' ? "✅" : "⚠️";
             toast.classList.add('show');
             setTimeout(() => toast.classList.remove('show'), 3000);
         }
 
         function exportPDF() {
-            if (!window.jspdf) { alert("PDF indisponível sem conexão inicial."); return; }
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            doc.text(`Relatorio ${experimentsData[currentExperiment].title}`, 10, 10);
-            doc.save(`Relatorio_${currentExperiment}.pdf`);
-            showToast("PDF Exportado!", "success");
-        }
-
-        function exportJPEG() {
-            if (!window.html2canvas) { alert("JPEG indisponível sem conexão inicial."); return; }
-            html2canvas(document.getElementById('captureArea')).then(canvas => {
-                const link = document.createElement('a');
-                link.download = `Planilha_${currentExperiment}.jpg`;
-                link.href = canvas.toDataURL('image/jpeg');
-                link.click();
-                showToast("JPEG Exportado!", "success");
-            });
+            window.print();
         }
     </script>
 </body>

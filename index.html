@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Planilhas de Campo - Tartarugalzinho</title>
+    
+    <!-- Bibliotecas externas opcionais para exportar PDF/JPEG (Com suporte offline se já em cache) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <!-- ESTILOS CSS PUROS EMBUTIDOS (Garantia 100% Offline para Samsung/Android/iOS) -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: #f1f5f9;
+            color: #1e293b;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Cabecalho */
+        header {
+            background-color: #064e3b;
+            color: #ffffff;
+            padding: 10px 16px;
+            position: sticky;
+            top: 0;
+            z-index: 30;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-title-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-icon {
+            background-color: #065f46;
+            padding: 8px;
+            border-radius: 10px;
+            color: #6ee7b7;
+        }
+
+        .header-actions {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Botões Globais */
+        .btn {
+            border: none;
+            border-radius: 8px;
+            padding: 6px 12px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .btn-exp { background-color: transparent; color: #ecfdf5; border: 1px solid rgba(255,255,255,0.2); }
+        .btn-exp.active { background-color: #ffffff; color: #022c22; font-weight: 700; }
+        .btn-action { background-color: #047857; color: #ffffff; }
+        .btn-action:hover { background-color: #059669; }
+        .btn-danger { background-color: #be123c; color: #ffffff; }
+        .btn-danger:hover { background-color: #e11d48; }
+
+        /* Layout Principal */
+        main {
+            flex: 1;
+            max-width: 1280px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        @media (min-width: 1024px) {
+            main { flex-direction: row; }
+            aside { width: 320px; shrink: 0; }
+        }
+
+        /* Sidebar e Cards */
+        .card {
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 12px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            margin-bottom: 12px;
+        }
+
+        .card-title {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #334155;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Grade de Botões de Escala (1 a 5) */
+        .grid-scale {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 6px;
+            margin-bottom: 8px;
+        }
+
+        .btn-scale {
+            padding: 10px 0;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 13px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .btn-scale.selected {
+            outline: 3px solid #0f172a;
+            transform: scale(1.05);
+        }
+
+        /* Cores Oficiais Escala VBM */
+        .vbm-1 { background-color: #047857 !important; color: #ffffff !important; }
+        .vbm-2 { background-color: #d97706 !important; color: #ffffff !important; }
+        .vbm-3 { background-color: #c2410c !important; color: #ffffff !important; }
+        .vbm-4 { background-color: #b91c1c !important; color: #ffffff !important; }
+        .vbm-5 { background-color: #6b21a8 !important; color: #ffffff !important; }
+        .vbm-empty { background-color: #fef2f2 !important; color: #991b1b !important; border: 1px solid #f87171 !important; }
+
+        /* Area do Campo / Blocos */
+        .field-area {
+            flex: 1;
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 16px;
+            border: 1px solid #e2e8f0;
+            overflow-y: auto;
+        }
+
+        .block-card {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 16px;
+        }
+
+        .plots-scroll {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+        }
+
+        .plot-box {
+            background-color: #ffffff;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            padding: 8px;
+            width: 124px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .plot-header {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+
+        .plot-badge {
+            background-color: #065f46;
+            color: #ffffff;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            font-size: 10px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Grelha 4x6 da Parcela */
+        .grid-plot {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 4px;
+            background-color: #f1f5f9;
+            padding: 4px;
+            border-radius: 8px;
+            border: 1px solid #cbd5e1;
+            width: 100%;
+        }
+
+        .cell-plant {
+            height: 36px;
+            border-radius: 4px;
+            font-weight: 700;
+            font-size: 11px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+
+        .cell-plant .plant-tag {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            font-size: 7px;
+            opacity: 0.75;
+            font-weight: 400;
+        }
+
+        .cell-border {
+            height: 36px;
+            border-radius: 4px;
+            background-color: #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #94a3b8;
+            font-size: 9px;
+        }
+
+        /* Barra de Progresso */
+        .progress-bar-bg {
+            width: 100%;
+            background-color: #a7f3d0;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 4px;
+        }
+
+        .progress-bar-fill {
+            background-color: #059669;
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        /* Modal e Toasts */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background-color: rgba(15, 23, 42, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            z-index: 50;
+        }
+
+        .modal-body {
+            background: #ffffff;
+            border-radius: 12px;
+            max-width: 360px;
+            width: 100%;
+            padding: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 16px;
+            right: 16px;
+            background-color: #0f172a;
+            color: #ffffff;
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transition: all 0.3s;
+            transform: translateY(100px);
+            opacity: 0;
+            z-index: 50;
+        }
+
+        .toast.show { transform: translateY(0); opacity: 1; }
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-container">
+            <div class="header-title-box">
+                <div class="header-icon">
+                    <i class="fa-solid fa-seedling"></i>
+                </div>
+                <div>
+                    <h1 style="font-size: 14px; font-weight: 700;">Coleta Tartarugalzinho</h1>
+                    <p style="font-size: 10px; color: #a7f3d0;">Severidade VBM (Campo)</p>
+                </div>
+            </div>
+
+            <div class="header-actions">
+                <div style="background-color: #022c22; padding: 3px; border-radius: 8px; display: flex; gap: 4px;">
+                    <button id="btnExp1" onclick="switchExperiment('sazonal')" class="btn btn-exp active">Sazonal</button>
+                    <button id="btnExp2" onclick="switchExperiment('poda')" class="btn btn-exp">Poda</button>
+                </div>
+
+                <button onclick="saveData()" class="btn btn-action"><i class="fa-solid fa-floppy-disk"></i> Salvar</button>
+                <button onclick="exportPDF()" class="btn btn-action"><i class="fa-solid fa-file-pdf"></i> PDF</button>
+                <button onclick="exportJPEG()" class="btn btn-action"><i class="fa-solid fa-image"></i> JPEG</button>
+                <button onclick="confirmClearData()" class="btn btn-danger"><i class="fa-solid fa-trash-can"></i></button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Sidebar Controles -->
+        <aside>
+            <div class="card">
+                <div class="card-title">
+                    <i class="fa-solid fa-star" style="color: #059669;"></i> Escala VBM (1 a 5)
+                </div>
+                <p style="font-size: 11px; color: #64748b; margin-bottom: 8px;">Selecione a nota e toque na planta útil:</p>
+                
+                <div id="severityButtons" class="grid-scale">
+                    <!-- Gerado via JS -->
+                </div>
+
+                <button onclick="setSelectedValue('')" class="btn" style="width: 100%; background-color: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; justify-content: center;">
+                    <i class="fa-solid fa-eraser"></i> Borracha (Limpar Nota)
+                </button>
+            </div>
+
+            <!-- Legenda da Escala -->
+            <div class="card">
+                <div class="card-title">
+                    <i class="fa-solid fa-clipboard-list" style="color: #059669;"></i> Legenda da Escala
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 4px; font-size: 11px;">
+                    <div style="display: flex; align-items: center; gap: 6px;">
+                        <span class="vbm-1" style="width: 16px; height: 16px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 10px;">1</span>
+                        <span>Sem sintomas visíveis</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 6px;">
+                        <span class="vbm-2" style="width: 16px; height: 16px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 10px;">2</span>
+                        <span>Clorose das folhas</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 6px;">
+                        <span class="vbm-3" style="width: 16px; height: 16px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 10px;">3</span>
+                        <span>Necrose das folhas</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 6px;">
+                        <span class="vbm-4" style="width: 16px; height: 16px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 10px;">4</span>
+                        <span>Roseta ou micélios</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 6px;">
+                        <span class="vbm-5" style="width: 16px; height: 16px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 10px;">5</span>
+                        <span>Morte descendente</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tratamentos -->
+            <div class="card">
+                <div class="card-title">
+                    <i class="fa-solid fa-book-open" style="color: #059669;"></i> Tratamentos
+                </div>
+                <div id="legendContainer" style="display: flex; flex-direction: column; gap: 4px; font-size: 11px;">
+                    <!-- Gerado via JS -->
+                </div>
+            </div>
+
+            <!-- Progresso -->
+            <div class="card" style="background-color: #ecfdf5; border-color: #a7f3d0;">
+                <div style="display: flex; justify-content: space-between; font-size: 11px; font-weight: 700; color: #065f46;">
+                    <span>Progresso de Avaliação</span>
+                    <span id="progressText">0%</span>
+                </div>
+                <div class="progress-bar-bg">
+                    <div id="progressBar" class="progress-bar-fill"></div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Campo Principal -->
+        <section id="captureArea" class="field-area">
+            <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; margin-bottom: 12px; border-bottom: 1px solid #e2e8f0;">
+                <div>
+                    <h2 id="experimentTitle" style="font-size: 15px; font-weight: 700;">AJUSTE SAZONAL TARTARUGALZINHO</h2>
+                    <p style="font-size: 11px; color: #64748b;">As 8 plantas úteis centrais são interativas (notas 1 a 5).</p>
+                </div>
+                <div style="background-color: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 600; color: #475569;">
+                    <i class="fa-solid fa-arrow-right" style="color: #059669;"></i> SENTIDO DAS LEIRAS
+                </div>
+            </div>
+
+            <div id="blocksContainer">
+                <!-- Gerado via JS -->
+            </div>
+
+            <div style="margin-top: 12px; padding-top: 12px; border-top: 2px dashed #cbd5e1; text-align: center; color: #94a3b8; font-weight: 700; font-size: 11px; background: #f8fafc; border-radius: 8px; padding: 8px;">
+                — — — — RAMAL — — — —
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal de Confirmação -->
+    <div id="customModal" class="modal-overlay hidden">
+        <div class="modal-body">
+            <h3 id="modalTitle" style="font-size: 15px; font-weight: 700; margin-bottom: 6px;">Confirmação</h3>
+            <p id="modalMessage" style="font-size: 12px; color: #475569; margin-bottom: 16px;">Deseja limpar todos os dados?</p>
+            <div style="display: flex; justify-content: flex-end; gap: 8px;">
+                <button onclick="closeModal()" class="btn" style="background-color: #f1f5f9; color: #334155;">Cancelar</button>
+                <button id="modalConfirmBtn" class="btn btn-danger">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+        <i id="toastIcon" class="fa-solid fa-circle-check" style="color: #34d399;"></i>
+        <span id="toastMsg">Salvo com sucesso!</span>
+    </div>
+
+    <script>
+        const experimentsData = {
+            sazonal: {
+                title: "AJUSTE SAZONAL TARTARUGALZINHO",
+                treatments: {
+                    1: "Tapioqueira sem irrigação",
+                    2: "Jurará sem irrigação",
+                    3: "Tapioqueira irrigada",
+                    4: "Jurará irrigada"
+                },
+                blocks: [
+                    { id: 1, name: "BLOCO 1", plots: [1, 2, 4, 3] },
+                    { id: 2, name: "BLOCO 2", plots: [2, 1, 3, 4] },
+                    { id: 3, name: "BLOCO 3", plots: [2, 1, 3, 4] }
+                ]
+            },
+            poda: {
+                title: "PODA FITOSSANITÁRIA TARTARUGALZINHO",
+                treatments: {
+                    1: "Tapioqueira (sem poda)",
+                    2: "Jurará (sem poda)",
+                    3: "Tapioqueira (com poda)",
+                    4: "Jurará (com poda)"
+                },
+                blocks: [
+                    { id: 2, name: "BLOCO 2", plots: [1, 2, 3, 4] },
+                    { id: 1, name: "BLOCO 1", plots: [2, 3, 4, 1] },
+                    { id: 3, name: "BLOCO 3", plots: [3, 4, 1, 2] }
+                ]
+            }
+        };
+
+        let currentExperiment = 'sazonal';
+        let selectedValue = '1';
+        let dataStore = { sazonal: {}, poda: {} };
+
+        const usefulPlantsMap = {
+            "1_1": 5, "1_2": 4, "2_1": 6, "2_2": 3,
+            "3_1": 7, "3_2": 2, "4_1": 8, "4_2": 1
+        };
+
+        window.addEventListener('DOMContentLoaded', () => {
+            loadFromLocalStorage();
+            renderApp();
+        });
+
+        function switchExperiment(expKey) {
+            currentExperiment = expKey;
+            document.getElementById('btnExp1').className = expKey === 'sazonal' ? 'btn btn-exp active' : 'btn btn-exp';
+            document.getElementById('btnExp2').className = expKey === 'poda' ? 'btn btn-exp active' : 'btn btn-exp';
+            document.getElementById('experimentTitle').innerText = experimentsData[expKey].title;
+            renderApp();
+        }
+
+        function setSelectedValue(val) {
+            selectedValue = val;
+            updateSeverityButtonsUI();
+        }
+
+        function updateSeverityButtonsUI() {
+            const container = document.getElementById('severityButtons');
+            let html = '';
+            for (let i = 1; i <= 5; i++) {
+                const isSelected = selectedValue === String(i) ? 'selected' : '';
+                html += `
+                    <button onclick="setSelectedValue('${i}')" class="btn-scale vbm-${i} ${isSelected}">
+                        ${i}
+                    </button>
+                `;
+            }
+            container.innerHTML = html;
+        }
+
+        function renderLegend() {
+            const container = document.getElementById('legendContainer');
+            const treatments = experimentsData[currentExperiment].treatments;
+            let html = '';
+            for (const [num, desc] of Object.entries(treatments)) {
+                html += `
+                    <div style="display:flex; align-items:center; gap:6px; background:#f8fafc; padding:4px; border-radius:6px; border:1px solid #e2e8f0;">
+                        <span style="background:#059669; color:#fff; width:16px; height:16px; border-radius:4px; font-weight:700; display:flex; align-items:center; justify-content:center; font-size:10px;">${num}</span>
+                        <span style="color:#334155;">${desc}</span>
+                    </div>
+                `;
+            }
+            container.innerHTML = html;
+        }
+
+        function renderApp() {
+            updateSeverityButtonsUI();
+            renderLegend();
+            const exp = experimentsData[currentExperiment];
+            const container = document.getElementById('blocksContainer');
+            
+            let html = '';
+            exp.blocks.forEach(block => {
+                html += `
+                    <div class="block-card">
+                        <h3 style="font-size:12px; font-weight:700; color:#064e3b; margin-bottom:8px;">
+                            <i class="fa-solid fa-layer-group" style="color:#059669;"></i> ${block.name}
+                        </h3>
+                        <div class="plots-scroll">
+                `;
+                block.plots.forEach(plotNum => {
+                    html += `
+                        <div class="plot-box">
+                            <div class="plot-header">
+                                <span style="font-size:9px; font-weight:700; color:#94a3b8;">PARCELA</span>
+                                <div class="plot-badge">${plotNum}</div>
+                            </div>
+                            <div class="grid-plot">
+                    `;
+                    for (let row = 0; row < 6; row++) {
+                        for (let col = 0; col < 4; col++) {
+                            const mapKey = `${row}_${col}`;
+                            const plantNumber = usefulPlantsMap[mapKey];
+                            const isUseful = plantNumber !== undefined;
+                            const cellKey = `${block.id}_${plotNum}_${row}_${col}`;
+                            const val = (dataStore[currentExperiment] && dataStore[currentExperiment][cellKey]) || '';
+                            
+                            if (isUseful) {
+                                const vbmClass = val ? `vbm-${val}` : 'vbm-empty';
+                                html += `
+                                    <button onclick="handleCellClick('${block.id}', '${plotNum}', '${row}', '${col}', true)" 
+                                        class="cell-plant ${vbmClass}">
+                                        <span class="plant-tag">p${plantNumber}</span>
+                                        <span style="margin-top:4px;">${val}</span>
+                                    </button>
+                                `;
+                            } else {
+                                html += `<div class="cell-border">·</div>`;
+                            }
+                        }
+                    }
+                    html += `
+                            </div>
+                        </div>
+                    `;
+                });
+                html += `
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+            updateProgress();
+        }
+
+        function handleCellClick(blockId, plotNum, row, col, isUseful) {
+            if (!isUseful) return;
+            const cellKey = `${blockId}_${plotNum}_${row}_${col}`;
+            if (!dataStore[currentExperiment]) dataStore[currentExperiment] = {};
+            
+            if (selectedValue === '') {
+                delete dataStore[currentExperiment][cellKey];
+            } else {
+                dataStore[currentExperiment][cellKey] = selectedValue;
+            }
+            renderApp();
+            autoSaveToLocalStorage();
+        }
+
+        function updateProgress() {
+            const exp = experimentsData[currentExperiment];
+            let totalUsefulCells = 0;
+            let filledCells = 0;
+            exp.blocks.forEach(block => {
+                block.plots.forEach(plotNum => {
+                    totalUsefulCells += 8;
+                    for (const mapKey in usefulPlantsMap) {
+                        const [row, col] = mapKey.split('_');
+                        const cellKey = `${block.id}_${plotNum}_${row}_${col}`;
+                        if (dataStore[currentExperiment] && dataStore[currentExperiment][cellKey]) {
+                            filledCells++;
+                        }
+                    }
+                });
+            });
+            const percent = totalUsefulCells > 0 ? Math.round((filledCells / totalUsefulCells) * 100) : 0;
+            document.getElementById('progressText').innerText = `${percent}% (${filledCells}/${totalUsefulCells})`;
+            document.getElementById('progressBar').style.width = `${percent}%`;
+        }
+
+        function autoSaveToLocalStorage() {
+            try {
+                localStorage.setItem('tartarugalzinho_vbm_v9', JSON.stringify(dataStore));
+            } catch (e) { console.error(e); }
+        }
+
+        function loadFromLocalStorage() {
+            try {
+                const saved = localStorage.getItem('tartarugalzinho_vbm_v9');
+                if (saved) dataStore = JSON.parse(saved);
+            } catch (e) { console.error(e); }
+        }
+
+        function saveData() {
+            autoSaveToLocalStorage();
+            showToast("Notas salvas no dispositivo!", "success");
+        }
+
+        function confirmClearData() {
+            const modal = document.getElementById('customModal');
+            document.getElementById('modalTitle').innerText = "Limpar Avaliações";
+            document.getElementById('modalMessage').innerText = `Deseja realmente limpar as notas de ${experimentsData[currentExperiment].title}?`;
+            
+            const confirmBtn = document.getElementById('modalConfirmBtn');
+            confirmBtn.onclick = function() {
+                dataStore[currentExperiment] = {};
+                autoSaveToLocalStorage();
+                renderApp();
+                closeModal();
+                showToast("Dados limpos.", "error");
+            };
+            modal.classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('customModal').classList.add('hidden');
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMsg').innerText = message;
+            document.getElementById('toastIcon').className = type === 'success' ? "fa-solid fa-circle-check" : "fa-solid fa-triangle-exclamation";
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        function exportPDF() {
+            if (!window.jspdf) { alert("PDF indisponível sem conexão inicial."); return; }
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            doc.text(`Relatorio ${experimentsData[currentExperiment].title}`, 10, 10);
+            doc.save(`Relatorio_${currentExperiment}.pdf`);
+            showToast("PDF Exportado!", "success");
+        }
+
+        function exportJPEG() {
+            if (!window.html2canvas) { alert("JPEG indisponível sem conexão inicial."); return; }
+            html2canvas(document.getElementById('captureArea')).then(canvas => {
+                const link = document.createElement('a');
+                link.download = `Planilha_${currentExperiment}.jpg`;
+                link.href = canvas.toDataURL('image/jpeg');
+                link.click();
+                showToast("JPEG Exportado!", "success");
+            });
+        }
+    </script>
+</body>
+</html>
